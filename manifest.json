@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "Douban eBook ++",
+  "version": "1.0.0",
+  "description": "Only one-click from Douban to your favorite ebook platforms",
+  "author": "BitBetter",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://book.douban.com/subject/*"
+      ],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": [
+    "https://book.douban.com/*",
+    "https://weread.qq.com/*",
+    "https://www.duokan.com/*",
+    "https://www.dedao.cn/*",
+    "https://du.163.com/*",
+    "https://read.douban.com/*",
+    "https://zh.chris101.ru/*",
+    "https://zh.vbh101.ru/*",
+    "https://zlib.ch/*",
+    "http://zlib.re/*"
+  ],
+  "action": {
+    "default_title": "豆瓣读书增强",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  }
+}

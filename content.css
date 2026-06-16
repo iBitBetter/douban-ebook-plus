@@ -1,0 +1,121 @@
+/**
+ * 豆瓣读书增强 — 注入面板样式
+ * 设计目标：与豆瓣原生风格融合，不突兀
+ */
+
+#dbplus-panel.dbplus-container {
+  margin: 0 0 20px 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* 面板标题 */
+.dbplus-header {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e8e8e8;
+  line-height: 1.4;
+}
+
+/* 链接列表 */
+.dbplus-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* 单个平台链接 */
+.dbplus-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #333;
+  background: #f7f7f7;
+  border: 1.5px solid transparent;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.dbplus-item:hover,
+.dbplus-item:focus {
+  background: #fff;
+  border-color: var(--platform-color, #07C160);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  color: var(--platform-color, #07C160);
+  text-decoration: none;
+  transform: translateX(2px);
+}
+
+.dbplus-item:visited {
+  color: #666;
+}
+
+/* 平台图标 */
+.dbplus-item-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
+/* 平台名称 */
+.dbplus-item-name {
+  font-weight: 500;
+}
+
+/* 直达标记 */
+.dbplus-badge {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 5px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #fff;
+  background: var(--platform-color, #07C160);
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* 镜像可用标记 */
+.dbplus-mirror-badge {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 5px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #fff;
+  background: #2B6CB0;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* ====================
+   响应式：移动端适配
+   ==================== */
+@media (max-width: 768px) {
+  .dbplus-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .dbplus-item {
+    flex: 0 0 auto;
+    padding: 6px 10px;
+    font-size: 13px;
+    gap: 4px;
+  }
+
+  .dbplus-item-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
