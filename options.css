@@ -1,0 +1,421 @@
+/* ========================
+   Douban eBook ++ 设置页样式
+   ======================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f5f5f5;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.6;
+  min-width: 480px;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+}
+
+/* Header */
+header {
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #2B6CB0;
+}
+
+header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2B6CB0;
+  margin-bottom: 4px;
+}
+
+header .subtitle {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Section */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.section-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.section-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.hint {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 16px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: #2B6CB0;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #1a5296;
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.btn-secondary:hover {
+  background: #cbd5e0;
+}
+
+.btn-danger {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+.btn-danger:hover {
+  background: #feb2b2;
+}
+
+.btn-small {
+  padding: 3px 10px;
+  font-size: 12px;
+}
+
+/* Mirror list */
+.mirror-list {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.mirror-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid #f0f0f0;
+  gap: 10px;
+  transition: background 0.15s;
+}
+
+.mirror-item:last-child {
+  border-bottom: none;
+}
+
+.mirror-item:hover {
+  background: #f7fafc;
+}
+
+.mirror-item.dragging {
+  opacity: 0.5;
+  background: #ebf4ff;
+}
+
+.drag-handle {
+  cursor: grab;
+  color: #cbd5e0;
+  font-size: 16px;
+  user-select: none;
+  flex-shrink: 0;
+  padding: 2px;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.mirror-index {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #2B6CB0;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mirror-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.mirror-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.mirror-urls {
+  font-size: 12px;
+  color: #a0aec0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mirror-urls code {
+  font-size: 11px;
+  background: #edf2f7;
+  padding: 1px 4px;
+  border-radius: 3px;
+  color: #4a5568;
+}
+
+.mirror-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.empty-state {
+  padding: 40px 20px;
+  text-align: center;
+  color: #a0aec0;
+}
+
+/* Status message */
+.status-msg {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  display: none;
+}
+
+.status-msg.success {
+  display: block;
+  background: #c6f6d5;
+  color: #276749;
+}
+
+.status-msg.error {
+  display: block;
+  background: #fed7d7;
+  color: #9b2c2c;
+}
+
+/* Anna's Archive section */
+.annas-section {
+  margin-top: 24px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  padding: 20px;
+}
+
+.annas-section .section-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #805AD5;
+}
+
+.annas-section .hint {
+  color: #888;
+  margin-bottom: 12px;
+}
+
+.annas-section .hint code {
+  font-size: 12px;
+  background: #edf2f7;
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: #805AD5;
+}
+
+.annas-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.annas-input-row input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #2d3748;
+  transition: border-color 0.15s;
+}
+
+.annas-input-row input:focus {
+  outline: none;
+  border-color: #805AD5;
+  box-shadow: 0 0 0 2px rgba(128,90,213,0.15);
+}
+
+.annas-section .status-msg {
+  margin-top: 10px;
+}
+
+/* Help section */
+.help-section {
+  margin-top: 32px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  padding: 20px;
+}
+
+.help-section h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #4a5568;
+}
+
+.help-section table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.help-section th,
+.help-section td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.help-section th {
+  font-weight: 600;
+  color: #4a5568;
+  background: #f7fafc;
+}
+
+.help-section td {
+  color: #555;
+}
+
+.help-section code {
+  font-size: 12px;
+  background: #edf2f7;
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: #2B6CB0;
+}
+
+/* Footer */
+footer {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+  text-align: center;
+  font-size: 12px;
+  color: #a0aec0;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 10px;
+  padding: 24px;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.modal-content h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #2d3748;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4a5568;
+  margin-bottom: 4px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #2d3748;
+  transition: border-color 0.15s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #2B6CB0;
+  box-shadow: 0 0 0 2px rgba(43,108,176,0.15);
+}
+
+.form-group input.error {
+  border-color: #e53e3e;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  justify-content: flex-end;
+}
+
+.modal-msg {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #e53e3e;
+  display: none;
+  min-height: 18px;
+}

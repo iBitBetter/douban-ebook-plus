@@ -162,3 +162,7 @@ curl -s 'https://du.163.com/search/book.json?word=三体&page=1&pageSize=3'
 - **内联 SVG** — 平台图标自包含，无网络请求
 
 ---
+
+## License
+
+MIT © BitBetter

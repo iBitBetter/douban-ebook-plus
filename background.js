@@ -326,15 +326,27 @@ async function resolveWoniuUrl(title, isbn) {
 // ========================
 
 /**
- * Z-Library 镜像地址列表（按优先级排序）
- * homeUrl:  用于 HEAD 探测可用性
- * searchBase: /s/{isbn} 搜索的基础 URL（可能不同于 homeUrl，因为部分镜像 302 会丢弃路径）
+ * 默认镜像配置（当用户未自定义时使用）
  */
-var ZLIB_MIRRORS = [
-  { name: 'chris101', homeUrl: 'https://zh.chris101.ru/', searchBase: 'https://zh.vbh101.ru' },
-  { name: 'zlib.ch',  homeUrl: 'https://zlib.ch/',       searchBase: 'https://zlib.ch' },
-  { name: 'zlib.re',  homeUrl: 'http://zlib.re/',        searchBase: 'http://zlib.re' }
+var DEFAULT_ZLIB_MIRRORS = [
+  { name: 'zlib.re', homeUrl: 'https://zh.zlib.re/', searchBase: 'https://zh.vbh101.ru' }
 ];
+
+/**
+ * 从 chrome.storage.sync 读取用户自定义镜像列表，没有则返回默认
+ * @returns {Promise<Array<{name: string, homeUrl: string, searchBase: string}>>}
+ */
+function getMirrorList() {
+  return new Promise(function (resolve) {
+    chrome.storage.sync.get(['zlib_mirrors'], function (result) {
+      if (result.zlib_mirrors && result.zlib_mirrors.length > 0) {
+        resolve(result.zlib_mirrors);
+      } else {
+        resolve(JSON.parse(JSON.stringify(DEFAULT_ZLIB_MIRRORS)));
+      }
+    });
+  });
+}
 
 /**
  * 带超时的 fetch，用于快速探测镜像可用性
@@ -374,23 +386,25 @@ function fetchWithTimeout(url, timeoutMs) {
  */
 async function probeZLibraryMirrors(isbn, title) {
   var PROBE_TIMEOUT = 3000; // 每个镜像 3 秒超时
+  var mirrors = await getMirrorList();
 
-  for (var i = 0; i < ZLIB_MIRRORS.length; i++) {
-    var mirror = ZLIB_MIRRORS[i];
-    console.log('[DB+] 探测 Z-Library 镜像:', mirror.name, mirror.homeUrl);
+  for (var i = 0; i < mirrors.length; i++) {
+    var mirror = mirrors[i];
+
+    // 拼接搜索链接：用 searchBase + /s/{isbn} 作为探测目标
+    var searchQuery = isbn || title;
+    var searchUrl = mirror.searchBase;
+    if (searchQuery) {
+      searchUrl += '/s/' + encodeURIComponent(searchQuery.trim());
+    } else {
+      searchUrl += '/';
+    }
+    console.log('[DB+] 探测 Z-Library 镜像:', mirror.name, searchUrl);
 
     try {
-      var alive = await fetchWithTimeout(mirror.homeUrl, PROBE_TIMEOUT);
+      var alive = await fetchWithTimeout(searchUrl, PROBE_TIMEOUT);
       if (alive) {
-        console.log('[DB+] Z-Library 镜像可用:', mirror.name);
-        // 拼接搜索链接：有 ISBN 用 /s/{isbn}，否则兜底首页
-        var searchQuery = isbn || title;
-        var searchUrl = mirror.searchBase;
-        if (searchQuery) {
-          searchUrl += '/s/' + encodeURIComponent(searchQuery.trim());
-        } else {
-          searchUrl += '/';
-        }
+        console.log('[DB+] Z-Library 镜像可用:', mirror.name, '→', searchUrl);
         return {
           url: searchUrl,
           mirror: mirror.name,
@@ -403,10 +417,18 @@ async function probeZLibraryMirrors(isbn, title) {
   }
 
   // 全部不可用，返回第一个作为兜底
-  console.warn('[DB+] 所有 Z-Library 镜像不可达，使用兜底:', ZLIB_MIRRORS[0].name);
-  var fallback = ZLIB_MIRRORS[0];
+  console.warn('[DB+] 所有 Z-Library 镜像不可达，使用兜底:', mirrors[0].name);
+  var fallback = mirrors[0];
+  // 兜底也尝试拼接搜索链接
+  var fallbackSearchQuery = isbn || title;
+  var fallbackUrl = fallback.searchBase;
+  if (fallbackSearchQuery) {
+    fallbackUrl += '/s/' + encodeURIComponent(fallbackSearchQuery.trim());
+  } else {
+    fallbackUrl += '/';
+  }
   return {
-    url: fallback.searchBase + '/',
+    url: fallbackUrl,
     mirror: fallback.name,
     alive: false
   };

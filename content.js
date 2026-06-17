@@ -107,7 +107,8 @@
         var q = isbn || title;
         return 'https://annas-archive.gl/search?q=' + encodeURIComponent(q);
       },
-      needsResolve: false
+      needsResolve: false,
+      needsConfigRefresh: true  // 从 storage 读取用户自定义搜索地址
     }
   ];
 
@@ -311,6 +312,30 @@
   }
 
   // ========================
+  // 异步读取 Anna's Archive 自定义搜索地址
+  // ========================
+  function resolveAnnasConfig(bookInfo, callback) {
+    try {
+      chrome.storage.sync.get(['annas_base'], function (result) {
+        if (chrome.runtime.lastError) {
+          callback(null);
+          return;
+        }
+        var baseUrl = result.annas_base;
+        if (baseUrl) {
+          var q = bookInfo.isbn || bookInfo.title;
+          var url = baseUrl.replace('{query}', encodeURIComponent(q));
+          callback({ url: url, custom: true });
+        } else {
+          callback(null);
+        }
+      });
+    } catch (e) {
+      callback(null);
+    }
+  }
+
+  // ========================
   // UI 构建
   // ========================
   function buildPanel(bookInfo, onReady) {
@@ -351,6 +376,13 @@
       // 标记需要镜像探测的平台
       if (platform.needsMirrorProbe) {
         asyncItems['mirror_' + platform.id] = item;
+        item.dataset.platform = platform.id;
+        item.dataset.fallbackUrl = url;
+      }
+
+      // 标记需要从 storage 刷新配置的平台
+      if (platform.needsConfigRefresh) {
+        asyncItems['config_' + platform.id] = item;
         item.dataset.platform = platform.id;
         item.dataset.fallbackUrl = url;
       }
@@ -460,10 +492,20 @@
           addDirectBadge(asyncItems.mirror_zlib);
           console.log('[DB+] Z-Library 镜像可用:', result.mirror, '→', result.url);
         } else if (result && result.url) {
-          // 全部未响应，使用兜底链接
+          // 镜像探测失败但仍返回搜索链接
           asyncItems.mirror_zlib.href = result.url;
-          asyncItems.mirror_zlib.title = 'Z-Library ' + result.mirror + '（镜像暂不可达）';
-          console.log('[DB+] Z-Library 所有镜像不可达，使用兜底:', result.mirror);
+          asyncItems.mirror_zlib.title = 'Z-Library 搜索「' + bookInfo.title + '」（镜像 ' + result.mirror + '）';
+          console.log('[DB+] Z-Library 镜像不可达，使用兜底搜索链接:', result.url);
+        }
+      });
+    }
+
+    // 异步刷新 Anna's Archive 自定义搜索地址
+    if (asyncItems.config_annas) {
+      resolveAnnasConfig(bookInfo, function (result) {
+        if (result && result.custom && result.url) {
+          asyncItems.config_annas.href = result.url;
+          console.log('[DB+] Anna\'s Archive 使用自定义搜索地址');
         }
       });
     }
@@ -489,14 +531,27 @@
 
     var panel = buildPanel(bookInfo);
 
-    // 注入策略：找到豆瓣页面右侧的合适位置
+    // 注入策略：优先插入右侧边栏（挨着评分/购买区域）
     var content = document.getElementById('content');
     if (content) {
-      var related = content.querySelector('.related_info, #related_info, .aside');
-      if (related) {
-        related.insertBefore(panel, related.firstChild);
-      } else {
-        content.appendChild(panel);
+      // 方案 1：豆瓣旧版布局 — 右侧 .aside
+      var aside = content.querySelector('.aside');
+      if (aside) {
+        aside.insertBefore(panel, aside.firstChild);
+      }
+      // 方案 2：豆瓣新版布局 — #wrapper 下的右栏
+      else {
+        var wrapper = document.getElementById('wrapper');
+        if (wrapper) {
+          var rightCol = wrapper.querySelector('.subject-others, .rr, [class*="right"]');
+          if (rightCol) {
+            rightCol.insertBefore(panel, rightCol.firstChild);
+          } else {
+            content.appendChild(panel);
+          }
+        } else {
+          content.appendChild(panel);
+        }
       }
     } else {
       document.body.appendChild(panel);

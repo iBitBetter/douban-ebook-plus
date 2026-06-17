@@ -29,10 +29,14 @@
     "https://www.dedao.cn/*",
     "https://du.163.com/*",
     "https://read.douban.com/*",
-    "https://zh.chris101.ru/*",
-    "https://zh.vbh101.ru/*",
-    "https://zlib.ch/*",
-    "http://zlib.re/*"
+    "*://*/*"
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "permissions": [
+    "storage"
   ],
   "action": {
     "default_title": "豆瓣读书增强",

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Douban eBook ++ 设置</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Douban eBook ++</h1>
+      <p class="subtitle">Z-Library 镜像地址配置</p>
+    </header>
+
+    <section class="mirror-section">
+      <div class="section-header">
+        <h2>镜像列表</h2>
+        <div class="section-actions">
+          <button id="btnAdd" class="btn btn-primary">+ 添加镜像</button>
+          <button id="btnReset" class="btn btn-secondary">恢复默认</button>
+        </div>
+      </div>
+      <p class="hint">按优先级从上到下探测，首个可用的镜像将用于生成 ISBN 搜索链接。</p>
+
+      <div id="mirrorList" class="mirror-list">
+        <!-- 动态渲染 -->
+      </div>
+
+      <div id="statusMsg" class="status-msg"></div>
+    </section>
+
+    <section class="annas-section">
+      <div class="section-header">
+        <h2>Anna's Archive</h2>
+      </div>
+      <p class="hint">Anna's Archive 搜索地址。默认使用 <code>annas-archive.gl</code>，如域名变更可在此修改。</p>
+      <div class="annas-input-row">
+        <input type="url" id="annasUrl" placeholder="https://annas-archive.gl/search?q={query}" maxlength="300">
+        <button id="btnSaveAnnas" class="btn btn-primary">保存</button>
+      </div>
+      <div id="annasStatus" class="status-msg"></div>
+    </section>
+
+    <section class="help-section">
+      <h2>镜像配置说明</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>字段</th>
+            <th>说明</th>
+            <th>示例</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>名称</code></td>
+            <td>镜像的简称，显示在面板中</td>
+            <td>chris101</td>
+          </tr>
+          <tr>
+            <td><code>探测地址 (homeUrl)</code></td>
+            <td>用于 HEAD 请求验证镜像是否存活</td>
+            <td>https://zh.chris101.ru/</td>
+          </tr>
+          <tr>
+            <td><code>搜索基础地址 (searchBase)</code></td>
+            <td>拼接 /s/{ISBN} 生成搜索链接的基础 URL。如果镜像会将请求重定向到其他域名，这里填最终落地的域名</td>
+            <td>https://zh.vbh101.ru</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer>
+      <p>Douban eBook ++ v1.0 · BitBetter</p>
+    </footer>
+  </div>
+
+  <!-- 编辑弹窗 -->
+  <div id="editModal" class="modal" style="display:none">
+    <div class="modal-content">
+      <h3 id="modalTitle">编辑镜像</h3>
+      <div class="form-group">
+        <label for="mirrorName">名称</label>
+        <input type="text" id="mirrorName" placeholder="例如：zlib.re" maxlength="50">
+      </div>
+      <div class="form-group">
+        <label for="mirrorHomeUrl">探测地址 (homeUrl)</label>
+        <input type="url" id="mirrorHomeUrl" placeholder="https://zh.zlib.re/" maxlength="200">
+      </div>
+      <div class="form-group">
+        <label for="mirrorSearchBase">搜索基础地址 (searchBase)</label>
+        <input type="url" id="mirrorSearchBase" placeholder="https://zh.vbh101.ru" maxlength="200">
+      </div>
+      <div class="modal-actions">
+        <button id="btnSave" class="btn btn-primary">保存</button>
+        <button id="btnCancel" class="btn btn-secondary">取消</button>
+      </div>
+      <div id="modalMsg" class="modal-msg"></div>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
